@@ -1,0 +1,21 @@
+Building the Apex MVP Web Interface
+Project Overview: You are building the initial web interface for Apex, a cycle-aware athletic performance optimization platform. Unlike general wellness trackers (e.g., Oura or Fitbit) that focus on "Readiness Scores" for the general population, Apex is a tactical service layer designed specifically for NCAA Division I and II female athletes in high-impact sports like soccer, basketball, and volleyball [Apex Context].
+Design Vibe: The aesthetic should be "Elite Tactical Performance." Avoid the soft, "wellness-only" look of standard femtech. Use high-contrast, data-driven layouts that feel authoritative and professional, similar to elite athlete management systems like Kitman Labs or Kairos.
+Core Website Components to Build:
+1. Hero Section (The Pitch):
+Headline: "The Performance Engine for Elite Female Athletes."
+Sub-headline: "Move beyond 'black box' wellness scores. Apex integrates cycle-specific physiological data with neuromuscular training load adjustments to mitigate ACL injury risk and maximize power output" [Apex Context, 2, 96].
+CTA Button: "Integrate Your Program."
+2. The Daily Athlete Dashboard (Mock Data View): Build a card-based dashboard that an athlete sees when logging in. It must display:
+Current Cycle Phase: (e.g., "Late Follicular Phase") [Apex Context].
+Training Intensity Recommendation: Use a 3-tier status: High / Moderate / Recovery [Apex Context].
+Biomechanical Safety Alert: If the user is in a high-risk phase (e.g., ovulatory), display an "ACL Injury-Risk Alert" [Apex Context, Pitch].
+Tactical S&C Adjustment: Instead of generic rest, show a specific adjustment like "Neuromuscular Control Emphasis" or "Plyometric Load Reduction" [Apex Context].
+Recovery Protocol: Daily personalized recommendation based on current capacity [Apex Context].
+3. The "Apex Advantage" Section (Competitive Differentiation): Create a feature grid that highlights why we are different from competitors like Wild.AI or Ultrahuman:
+Transparency: No "black box" proprietary algorithms. Our models are trained on aggregated female performance metrics, not general step counts [2, 19, Apex Context].
+Safety Necessity: Specifically designed to address the increased likelihood of ACL tears in female physiology [Pitch].
+Tactical Integration: We don't replace your coach's sport-specific plan; we provide the service layer to optimize the training you're already doing [Apex Context].
+4. Technical Requirements for the Agent:
+Framework: Use a modern React or Next.js framework.
+Data Visualization: Include placeholders for charts showing the correlation between HRV, RHR, and injury risk patterns over the 28-day cycle.

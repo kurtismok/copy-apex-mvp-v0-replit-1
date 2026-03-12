@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Barlow', sans-serif;
+    --font-display: 'Rajdhani', sans-serif;
+
+    /* Elite Tactical Dark Palette */
+    --background: 220 15% 4%;
+    --foreground: 220 10% 90%;
+    
+    --card: 220 15% 7%;
+    --card-foreground: 220 10% 90%;
+    
+    --popover: 220 15% 7%;
+    --popover-foreground: 220 10% 90%;
+    
+    /* Cobalt Blue for Primary (Elite Tactical Vibe) */
+    --primary: 215 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 220 15% 12%;
+    --secondary-foreground: 220 10% 90%;
+    
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 60%;
+    
+    --accent: 220 15% 15%;
+    --accent-foreground: 215 100% 50%;
+    
+    /* Infrared / Crimson for Alerts */
+    --destructive: 360 100% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 15%;
+    --input: 220 15% 12%;
+    --ring: 215 100% 50%;
+
+    --radius: 0.25rem; /* Sharp, tactical corners */
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-bold tracking-tight uppercase;
+  }
+}
+
+@layer utilities {
+  .tactical-border {
+    position: relative;
+  }
+  .tactical-border::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 1px solid hsl(var(--border));
+    pointer-events: none;
+    border-radius: inherit;
+    transition: border-color 0.3s ease;
+  }
+  .tactical-border:hover::after {
+    border-color: hsl(var(--primary) / 0.5);
+  }
+  
+  .glow-text {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+  }
+  
+  .glow-box {
+    box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.3);
+  }
+  
+  .glow-box-destructive {
+    box-shadow: 0 0 20px -5px hsl(var(--destructive) / 0.4);
+  }
+}
+
+/* Custom Scrollbar for a sleek look */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
