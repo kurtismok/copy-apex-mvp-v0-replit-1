@@ -41,6 +41,17 @@ export default function Dashboard() {
     refetch: refetchChart
   } = useChartData();
 
+  // ⭐ NEW STATE FOR DAILY CHECK-IN
+  const [energy, setEnergy] = useState(3);
+  const [mood, setMood] = useState("Neutral");
+  const [soreness, setSoreness] = useState(3);
+  const [cycleDay, setCycleDay] = useState(1);
+
+  const handleSubmit = () => {
+    console.log({ energy, mood, soreness, cycleDay });
+    alert("Check-in saved!");
+  };
+
   const handleRetry = () => {
     refetchMetrics();
     refetchChart();
@@ -121,131 +132,75 @@ export default function Dashboard() {
           </TacticalCard>
         </div>
 
-        {/* Biomechanical Alert (if present or mocked) */}
-        {(!metricsLoading && (metrics?.biomechanicalAlert || true)) && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mb-8"
-          >
-            <TacticalCard variant="destructive">
-              <div className="flex items-start space-x-4">
-                <div className="bg-destructive/20 p-3 rounded-sm border border-destructive/50">
-                  <AlertTriangle className="w-6 h-6 text-destructive" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-display font-bold uppercase tracking-wider text-destructive mb-1">
-                    Biomechanical Safety Alert
-                  </h3>
-                  <p className="text-foreground font-sans">
-                    {metrics?.biomechanicalAlert || "Elevated knee valgus risk detected based on current phase and load history. Prioritize hamstring/glute activation in warm-up."}
-                  </p>
+        {/* ⭐ NEW: DAILY CHECK-IN */}
+        <div className="mb-8">
+          <TacticalCard delay={0.45}>
+            <CardHeader>
+              <CardTitle>Daily Check-In</CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              
+              {/* Energy */}
+              <div>
+                <label className="text-sm font-medium">Energy: {energy}</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={energy}
+                  onChange={(e) => setEnergy(Number(e.target.value))}
+                  className="w-full"
+                />
+              </div>
+
+              {/* Mood */}
+              <div>
+                <label className="text-sm font-medium">Mood</label>
+                <div className="flex gap-2 mt-1">
+                  {["Happy", "Neutral", "Tired"].map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setMood(m)}
+                      className={`px-3 py-1 rounded ${
+                        mood === m ? "bg-primary text-white" : "bg-muted"
+                      }`}
+                    >
+                      {m}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </TacticalCard>
-          </motion.div>
-        )}
 
-        {/* Chart Section */}
-        <TacticalCard delay={0.6} className="col-span-full h-[500px]">
-          <div className="flex items-center justify-between mb-6">
-            <CardHeader className="mb-0"><Activity className="w-4 h-4" /> 28-Day Physiological Trend</CardHeader>
-            <div className="flex space-x-4 text-xs font-display uppercase tracking-widest">
-              <div className="flex items-center"><span className="w-3 h-3 bg-primary rounded-sm mr-2" /> HRV</div>
-              <div className="flex items-center"><span className="w-3 h-3 bg-destructive rounded-sm mr-2 opacity-50" /> Injury Risk</div>
-            </div>
-          </div>
-          
-          <div className="flex-1 min-h-0 relative">
-            {chartLoading ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin glow-box" />
+              {/* Soreness */}
+              <div>
+                <label className="text-sm font-medium">Soreness: {soreness}</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={soreness}
+                  onChange={(e) => setSoreness(Number(e.target.value))}
+                  className="w-full"
+                />
               </div>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={chartData || MOCK_CHART_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="riskGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis 
-                    dataKey="day" 
-                    stroke="hsl(var(--muted-foreground))" 
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12, fontFamily: 'var(--font-sans)' }}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(val) => `D${val}`}
-                  />
-                  <YAxis 
-                    yAxisId="left" 
-                    stroke="hsl(var(--muted-foreground))" 
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis 
-                    yAxisId="right" 
-                    orientation="right" 
-                    stroke="hsl(var(--destructive))" 
-                    tick={{ fill: 'hsl(var(--destructive))', fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'hsl(var(--card))', 
-                      borderColor: 'hsl(var(--border))',
-                      borderRadius: '4px',
-                      color: 'hsl(var(--foreground))',
-                      fontFamily: 'var(--font-sans)'
-                    }}
-                    itemStyle={{ color: 'hsl(var(--foreground))' }}
-                    labelStyle={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', color: 'hsl(var(--muted-foreground))', marginBottom: '4px' }}
-                  />
-                  
-                  <Area 
-                    yAxisId="right"
-                    type="monotone" 
-                    dataKey="injuryRisk" 
-                    name="Injury Risk %"
-                    stroke="hsl(var(--destructive))" 
-                    fill="url(#riskGradient)" 
-                    strokeWidth={2}
-                  />
-                  <Line 
-                    yAxisId="left"
-                    type="monotone" 
-                    dataKey="hrv" 
-                    name="HRV (ms)"
-                    stroke="hsl(var(--primary))" 
-                    strokeWidth={3} 
-                    dot={{ r: 3, fill: 'hsl(var(--background))', stroke: 'hsl(var(--primary))', strokeWidth: 2 }}
-                    activeDot={{ r: 6, fill: 'hsl(var(--primary))', glow: 'true' }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </TacticalCard>
 
-      </div>
-    </div>
-  );
-}
+              {/* Cycle Day */}
+              <div>
+                <label className="text-sm font-medium">Cycle Day</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="28"
+                  value={cycleDay}
+                  onChange={(e) => setCycleDay(Number(e.target.value))}
+                  className="w-full border rounded px-2 py-1 mt-1"
+                />
+              </div>
 
-// Fallback data if API doesn't exist yet but we want to show the beautiful UI
-const MOCK_CHART_DATA = Array.from({ length: 28 }, (_, i) => {
-  const day = i + 1;
-  // Simulate cyclical changes
-  const phase = Math.sin((day / 28) * Math.PI * 2);
-  return {
-    day,
-    hrv: Math.round(60 + phase * 15 + Math.random() * 5),
-    rhr: Math.round(55 - phase * 5 + Math.random() * 3),
-    injuryRisk: Math.max(0, Math.round(15 - phase * 20 + Math.random() * 10)),
-  };
-});
+              <Button onClick={handleSubmit} className="w-full">
+                Save Check-In
+              </Button>
+            </CardContent>
+          </TacticalCard>
+        </div>
